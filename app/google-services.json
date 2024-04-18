@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690912769363",
+    "project_id": "let-s-buy-72a05",
+    "storage_bucket": "let-s-buy-72a05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690912769363:android:72dc6965505338bf3a1da6",
+        "android_client_info": {
+          "package_name": "com.creativeitinstitute.letsbuy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_xx3lcnMNIn48ZEUEaCoKJj9d0Myjzhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
