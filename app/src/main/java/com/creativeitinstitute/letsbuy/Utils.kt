@@ -1,0 +1,13 @@
+package com.creativeitinstitute.letsbuy
+
+import android.widget.EditText
+
+fun EditText.isEmpty(): Boolean{
+    return if (this.text.toString().isEmpty()){
+        this.error = "This Foled Need to be Fill up"
+        true
+    }else{
+        false
+    }
+
+}
