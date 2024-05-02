@@ -7,19 +7,23 @@
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".views.register.RegisterFragment">
-    <ImageView
-        android:src="@mipmap/ic_launcher_round"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        app:lottie_rawRes="@raw/ecom_2"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center"/>
 
     <TextView
-        android:layout_margin="@dimen/_32sdp"
+        android:layout_margin="@dimen/_8sdp"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bebas_neue"
         android:gravity="center"
-        android:text="Login to Let's Buy"
+        android:text="Register to Let's Buy"
         android:textColor="@color/_ff9800" />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_marginTop="@dimen/_8sdp"
@@ -120,7 +124,7 @@
     <Button
         android:id="@+id/btnLogin"
         app:strokeColor="@color/_ff9800"
-        android:text="Register"
+        android:text="Already have an account?"
         android:fontFamily="@font/poppins"
         android:textStyle="bold"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"

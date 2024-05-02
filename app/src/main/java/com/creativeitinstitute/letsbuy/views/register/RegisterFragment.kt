@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.databinding.FragmentRegisterBinding
 import com.creativeitinstitute.letsbuy.isEmpty
@@ -15,7 +17,7 @@ class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
 
-
+    val viewModel: RegistrationViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +33,10 @@ class RegisterFragment : Fragment() {
 
 
         with(binding){
+            btnLogin.setOnClickListener {
+                findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+            }
+
             btnRegister.setOnClickListener {
                 etName.isEmpty()
                 etEmail.isEmpty()
@@ -38,6 +44,9 @@ class RegisterFragment : Fragment() {
 
                 if (!etName.isEmpty() && !etEmail.isEmpty() && !etPassword.isEmpty()){
                     Toast.makeText(context,"All input done !", Toast.LENGTH_LONG).show()
+
+                    val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), "Seller", "")
+                    viewModel.userRegistration(user)
                 }
 
             }
