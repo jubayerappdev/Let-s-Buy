@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
+import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.databinding.FragmentRegisterBinding
 import com.creativeitinstitute.letsbuy.isEmpty
 
@@ -26,7 +27,24 @@ class RegisterFragment : Fragment() {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         setListener()
+        registrationObserver()
         return binding.root
+    }
+
+    private fun registrationObserver() {
+        viewModel.registrationResponse.observe(viewLifecycleOwner){
+            when(it){
+                is DataState.Error -> {
+                    Toast.makeText(context, it.message,Toast.LENGTH_SHORT).show()
+                }
+                is DataState.Loading -> {
+                    Toast.makeText(context, "Loading....",Toast.LENGTH_SHORT).show()
+                }
+                is DataState.Success -> {
+                    Toast.makeText(context,"created User : ${it.data}",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setListener() {
