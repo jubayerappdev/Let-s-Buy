@@ -7,26 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
+import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.databinding.FragmentStartBinding
 
 
-class StartFragment : Fragment() {
-
-    private lateinit var binding: FragmentStartBinding
+class StartFragment : BaseFragment<FragmentStartBinding>(FragmentStartBinding::inflate) {
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentStartBinding.inflate(inflater, container, false)
 
-        setListener()
-        return binding.root
-    }
-
-    private fun setListener() {
+     override fun setListener() {
 
         with(binding){
             btnLogin.setOnClickListener {
@@ -37,6 +26,10 @@ class StartFragment : Fragment() {
                 findNavController().navigate(R.id.action_startFragment2_to_registerFragment)
             }
         }
+
+    }
+
+    override fun allObserver() {
 
     }
 
