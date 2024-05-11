@@ -13,8 +13,9 @@ import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.databinding.FragmentRegisterBinding
 import com.creativeitinstitute.letsbuy.isEmpty
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
 

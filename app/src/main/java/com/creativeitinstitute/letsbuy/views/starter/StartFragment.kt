@@ -9,8 +9,9 @@ import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.databinding.FragmentStartBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class StartFragment : BaseFragment<FragmentStartBinding>(FragmentStartBinding::inflate) {
 
 

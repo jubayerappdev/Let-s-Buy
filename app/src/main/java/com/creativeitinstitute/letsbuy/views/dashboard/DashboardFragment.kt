@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.databinding.FragmentDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DashboardFragment : BaseFragment<FragmentDashboardBinding>(FragmentDashboardBinding::inflate) {
     override fun setListener() {
 

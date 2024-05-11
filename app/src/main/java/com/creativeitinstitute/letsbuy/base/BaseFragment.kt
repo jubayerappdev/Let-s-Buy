@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
+//open class
 @Suppress("DEPRECATION")
 abstract class BaseFragment <VB : ViewBinding>(
-    private val bindingInflater : (inflater : LayoutInflater) ->VB
+    private val bindingInflater : (inflater : LayoutInflater) ->VB //higher order function
 
 
 ) : Fragment() {
@@ -19,6 +20,7 @@ abstract class BaseFragment <VB : ViewBinding>(
 
     val binding : VB
         get() = _binding as VB
+
     lateinit var loading: ProgressDialog
 
     override fun onCreateView(
@@ -28,7 +30,8 @@ abstract class BaseFragment <VB : ViewBinding>(
     ): View? {
 
         _binding = bindingInflater.invoke(inflater)
-        loading = ProgressDialog(context)
+
+        loading = ProgressDialog(requireContext())
 
         setListener()
         allObserver()

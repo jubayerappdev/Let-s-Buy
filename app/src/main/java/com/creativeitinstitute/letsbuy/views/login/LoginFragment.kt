@@ -11,8 +11,9 @@ import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.databinding.FragmentLoginBinding
 import com.creativeitinstitute.letsbuy.isEmpty
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
 
@@ -37,7 +38,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     override fun allObserver() {
-        TODO("Not yet implemented")
+
     }
 
 
