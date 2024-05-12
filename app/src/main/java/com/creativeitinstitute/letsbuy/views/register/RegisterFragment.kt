@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
 
-    val viewModel: RegistrationViewModel by viewModels()
+    private val viewModel: RegistrationViewModel by viewModels()
 
 
 

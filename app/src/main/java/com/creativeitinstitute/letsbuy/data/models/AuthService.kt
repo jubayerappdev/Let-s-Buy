@@ -1,5 +1,6 @@
 package com.creativeitinstitute.letsbuy.data.models
 
+import com.creativeitinstitute.letsbuy.views.login.UserLogin
 import com.creativeitinstitute.letsbuy.views.register.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -15,11 +16,10 @@ class AuthService @Inject constructor(private val jAuth: FirebaseAuth) : AuthSou
 
     }
 
-    override fun userLogin(user: User) {
-
-        jAuth.signInWithEmailAndPassword(user.email, user.password)
-
+    override fun userLogin(user: UserLogin) : Task<AuthResult> {
+       return jAuth.signInWithEmailAndPassword(user.email, user.password)
     }
+
 
     override fun userForgetPassword(email: String) {
 
