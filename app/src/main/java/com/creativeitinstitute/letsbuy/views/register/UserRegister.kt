@@ -1,10 +1,10 @@
 package com.creativeitinstitute.letsbuy.views.register
 
-data class User(
+data class UserRegister(
     val name:String,
     val email:String,
     val password:String,
     val userType:String,
-    val userID:String
+    var userID:String
 
 )

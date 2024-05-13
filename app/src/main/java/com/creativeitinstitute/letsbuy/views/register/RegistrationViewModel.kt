@@ -5,27 +5,43 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.creativeitinstitute.letsbuy.core.DataState
-import com.creativeitinstitute.letsbuy.data.models.AuthService
+import com.creativeitinstitute.letsbuy.data.models.AuthRepository
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(private val authService: AuthService): ViewModel() {
+class RegistrationViewModel @Inject constructor(private val authService: AuthRepository): ViewModel() {
 
 
-    private val _registrationResponse = MutableLiveData<DataState<User>>()
-    val registrationResponse: LiveData<DataState<User>> = _registrationResponse
+    private val _registrationResponse = MutableLiveData<DataState<UserRegister>>()
+    val registrationResponse: LiveData<DataState<UserRegister>> = _registrationResponse
 
 
-    fun userRegistration(user: User){
+    fun userRegistration(user: UserRegister){
         _registrationResponse.postValue(DataState.Loading())
 
 
         authService.userRegistration(user)
             .addOnSuccessListener {
-                _registrationResponse.postValue(DataState.Success(user))
+                it.user?.let { createdUser ->
 
-                Log.d("TAG", "userRegistration: Success ")
+                    user.userID = createdUser.uid
+
+                    authService.createUser(user).addOnSuccessListener {
+
+                        _registrationResponse.postValue(DataState.Success(user))
+
+                        Log.d("TAG", "userRegistration: Success ")
+                    }.addOnFailureListener {error->
+
+                        _registrationResponse.postValue(DataState.Error("${error.message}"))
+
+                    }
+                }
+
+
+
 
         }.addOnFailureListener {error->
 

@@ -1,7 +1,9 @@
 package com.creativeitinstitute.letsbuy.di
 
-import com.creativeitinstitute.letsbuy.data.models.AuthService
+import com.creativeitinstitute.letsbuy.data.models.AuthRepository
+
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,11 +23,17 @@ class FirebaseModule {
         return FirebaseAuth.getInstance()
     }
 
+
     @Provides
     @Singleton
-    fun providesFirebase(jAuth: FirebaseAuth): AuthService{
-        return AuthService(jAuth)
+    fun providesFirebaseFireStoreDB(): FirebaseFirestore{
+        return FirebaseFirestore.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun providesFirebase(jAuth: FirebaseAuth, db : FirebaseFirestore): AuthRepository{
+        return AuthRepository(jAuth, db)
+    }
 
 }

@@ -1,10 +1,5 @@
 package com.creativeitinstitute.letsbuy.views.register
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -40,7 +35,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 if (!etName.isEmpty() && !etEmail.isEmpty() && !etPassword.isEmpty()){
                     Toast.makeText(context,"All input done !", Toast.LENGTH_LONG).show()
 
-                    val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), "Seller", "")
+                    val user = UserRegister(etName.text.toString(),
+                        etEmail.text.toString(),
+                        etPassword.text.toString(),
+                        "Seller",
+                        ""
+                    )
+
                     viewModel.userRegistration(user)
                 }
 
