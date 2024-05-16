@@ -1,5 +1,6 @@
 package com.creativeitinstitute.letsbuy.views.register
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -8,6 +9,7 @@ import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.databinding.FragmentRegisterBinding
 import com.creativeitinstitute.letsbuy.isEmpty
+import com.creativeitinstitute.letsbuy.views.dashboard.seller.SellerDashboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -69,6 +71,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 is DataState.Success -> {
                     loading.dismiss()
                     Toast.makeText(context,"created User : ${it.data}",Toast.LENGTH_SHORT).show()
+
+                    startActivity(Intent(requireContext(), SellerDashboard::class.java))
+                    requireActivity().finish()
                 }
             }
         }

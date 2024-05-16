@@ -26,7 +26,7 @@ class AuthRepository @Inject constructor(
     }
 
     override fun createUser(user: UserRegister) : Task<Void>{
-      return  db.collection(Nodes.USER).document(user.userID).set(user)
+      return  db.collection(Nodes.USER).document(user.userID).set(user) //val res
 
     }
 

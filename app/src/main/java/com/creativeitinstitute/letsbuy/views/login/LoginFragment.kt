@@ -1,5 +1,6 @@
 package com.creativeitinstitute.letsbuy.views.login
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -8,6 +9,7 @@ import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.databinding.FragmentLoginBinding
 import com.creativeitinstitute.letsbuy.isEmpty
+import com.creativeitinstitute.letsbuy.views.dashboard.seller.SellerDashboard
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,7 +58,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     loading.dismiss()
                     Toast.makeText(context,"User logged in : ${it.data}",Toast.LENGTH_SHORT).show()
 
-                    findNavController().navigate(R.id.action_loginFragment_to_sellerDashboardFragment)
+                    startActivity(Intent(requireContext(), SellerDashboard::class.java))
+                    requireActivity().finish()
                 }
             }
         }

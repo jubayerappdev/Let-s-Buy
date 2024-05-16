@@ -1,16 +1,12 @@
 package com.creativeitinstitute.letsbuy.views.starter
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Intent
 import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.databinding.FragmentStartBinding
+import com.creativeitinstitute.letsbuy.views.dashboard.seller.SellerDashboard
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +32,8 @@ class StartFragment : BaseFragment<FragmentStartBinding>(FragmentStartBinding::i
 
     private fun setUpAutoLogin() {
         FirebaseAuth.getInstance().currentUser?.let {
-            findNavController().navigate(R.id.action_startFragment2_to_sellerDashboardFragment)
+            startActivity(Intent(requireContext(), SellerDashboard::class.java))
+            requireActivity().finish()
 
         }
     }
