@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 import com.creativeitinstitute.letsbuy.core.DataState
-import com.creativeitinstitute.letsbuy.data.models.AuthRepository
+import com.creativeitinstitute.letsbuy.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

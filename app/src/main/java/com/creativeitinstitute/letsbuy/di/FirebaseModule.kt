@@ -1,6 +1,6 @@
 package com.creativeitinstitute.letsbuy.di
 
-import com.creativeitinstitute.letsbuy.data.models.AuthRepository
+import com.creativeitinstitute.letsbuy.data.repository.AuthRepository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,7 +32,7 @@ class FirebaseModule {
 
     @Provides
     @Singleton
-    fun providesFirebase(jAuth: FirebaseAuth, db : FirebaseFirestore): AuthRepository{
+    fun providesFirebase(jAuth: FirebaseAuth, db : FirebaseFirestore): AuthRepository {
         return AuthRepository(jAuth, db)
     }
 

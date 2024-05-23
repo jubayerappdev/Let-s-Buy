@@ -1,6 +1,7 @@
-package com.creativeitinstitute.letsbuy.data.models
+package com.creativeitinstitute.letsbuy.data.repository
 
 import com.creativeitinstitute.letsbuy.core.Nodes
+import com.creativeitinstitute.letsbuy.data.models.AuthSource
 import com.creativeitinstitute.letsbuy.views.login.UserLogin
 import com.creativeitinstitute.letsbuy.views.register.UserRegister
 import com.google.android.gms.tasks.Task
