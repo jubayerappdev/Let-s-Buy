@@ -1,19 +1,15 @@
-package com.creativeitinstitute.letsbuy.views.dashboard.seller
+package com.creativeitinstitute.letsbuy.views.dashboard.seller.upload
 
 import android.Manifest
 import android.app.Activity
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.creativeitinstitute.letsbuy.R
+import androidx.fragment.app.viewModels
 import com.creativeitinstitute.letsbuy.base.BaseFragment
+import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.core.areAllPermissionsGranted
 import com.creativeitinstitute.letsbuy.core.extract
 import com.creativeitinstitute.letsbuy.core.requestPermissions
@@ -26,7 +22,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(FragmentUploadProductBinding::inflate) {
 
 
-    private lateinit var product : Product
+    private val product : Product by lazy() {
+        Product()
+    }
+    private val viewModel: ProductUploadViewModel by viewModels()
     override fun setListener() {
 
         permissionsRequest = getPermissionsRequest()
@@ -48,11 +47,12 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
                 val description = etProductDescription.extract()
                 val amount = etProductAmount.extract()
 
-                product = Product(name = name,
-                    description = description,
-                    price = price.toDouble(),
-                    amount = amount.toInt()
-                )
+                product.apply {
+                    this.name = name
+                    this.description = description
+                    this.price = price.toDouble()
+                    this.amount = amount.toInt()
+                }
                 
                 uploadProduct(product)
                 
@@ -70,6 +70,9 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
       return  registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
 
             if (areAllPermissionsGranted(permissionList)){
+
+
+
                 //ase
                 Toast.makeText(requireContext(), "Ase", Toast.LENGTH_LONG).show()
 
@@ -95,10 +98,30 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
 
     private fun uploadProduct(product: Product) {
 
+        viewModel.productUpload(product)
+
 
     }
 
     override fun allObserver() {
+
+        viewModel.productUploadResponse.observe(viewLifecycleOwner){
+            when(it){
+                is DataState.Error->{
+
+                    loading.dismiss()
+                }
+                is DataState.Loading -> {
+                    loading.show()
+
+                }
+                is DataState.Success ->{
+                    Toast.makeText(requireContext(),it.data, Toast.LENGTH_LONG).show()
+                    loading.dismiss()
+
+                }
+            }
+        }
 
     }
     companion object{
@@ -122,6 +145,7 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
                 val fileUri = data?.data!!
                 Log.d("TAG", "$fileUri")
                 binding.ivProduct.setImageURI(fileUri)
+                product.imageLink = fileUri.toString()
 
 
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
