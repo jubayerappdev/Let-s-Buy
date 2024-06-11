@@ -16,7 +16,10 @@ import com.creativeitinstitute.letsbuy.core.requestPermissions
 import com.creativeitinstitute.letsbuy.data.Product
 import com.creativeitinstitute.letsbuy.databinding.FragmentUploadProductBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(FragmentUploadProductBinding::inflate) {
@@ -25,6 +28,9 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
     private val product : Product by lazy() {
         Product()
     }
+
+
+
     private val viewModel: ProductUploadViewModel by viewModels()
     override fun setListener() {
 
@@ -47,12 +53,19 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
                 val description = etProductDescription.extract()
                 val amount = etProductAmount.extract()
 
-                product.apply {
-                    this.name = name
-                    this.description = description
-                    this.price = price.toDouble()
-                    this.amount = amount.toInt()
+                FirebaseAuth.getInstance().currentUser?.let {
+                    product.apply {
+                        this.productID=UUID.randomUUID().toString()
+                        this.sellerID = it.uid
+                        this.name = name
+                        this.description = description
+                        this.price = price.toDouble()
+                        this.amount = amount.toInt()
+                    }
                 }
+
+
+
                 
                 uploadProduct(product)
                 

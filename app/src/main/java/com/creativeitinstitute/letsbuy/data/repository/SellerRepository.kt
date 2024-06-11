@@ -1,10 +1,13 @@
 package com.creativeitinstitute.letsbuy.data.repository
 
 import android.net.Uri
+import com.creativeitinstitute.letsbuy.core.Nodes
 import com.creativeitinstitute.letsbuy.data.Product
 import com.creativeitinstitute.letsbuy.data.models.SellerSource
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import javax.inject.Inject
@@ -21,7 +24,15 @@ class SellerRepository @Inject constructor(
 
     }
 
-    override fun uploadProduct(product: Product) {
+    override fun uploadProduct(product: Product):Task<Void> {
+       return db.collection(Nodes.PRODUCT).document(product.productID).set(product)
+
+    }
+
+    override fun getAllProductByUserID(userID: String): Task<QuerySnapshot> {
+
+       return db.collection(Nodes.PRODUCT).whereEqualTo("sellerID", userID).get()
+
 
     }
 }

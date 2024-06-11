@@ -13,6 +13,7 @@ import com.creativeitinstitute.letsbuy.data.repository.AuthRepository
 import com.creativeitinstitute.letsbuy.data.repository.SellerRepository
 import com.creativeitinstitute.letsbuy.views.login.UserLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,9 +32,23 @@ class ProductUploadViewModel @Inject constructor(private val repo: SellerReposit
 
 
             snapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener {url ->
-                _productUploadResponse.postValue(DataState.Success(
-                    url.toString()
-                ))
+
+                product.imageLink = url.toString()
+
+
+                repo.uploadProduct(product)
+                    .addOnSuccessListener {
+                        _productUploadResponse.postValue(DataState.Success(
+                            "Uploaded and Updated Product Successfully !"
+                        ))
+                    }.addOnFailureListener {
+                        _productUploadResponse.postValue(DataState.Error("${it.message}"))
+                    }
+
+
+//                _productUploadResponse.postValue(DataState.Success(
+//                    url.toString()
+//                ))
 
             }
 
