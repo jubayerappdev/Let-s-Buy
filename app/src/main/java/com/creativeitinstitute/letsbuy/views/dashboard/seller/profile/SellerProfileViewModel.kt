@@ -20,59 +20,84 @@ import javax.inject.Inject
 @HiltViewModel
 class SellerProfileViewModel @Inject constructor(private val repo: SellerProfileRepository):ViewModel(){
 
-    private val _productUploadResponse = MutableLiveData<DataState<String>>()
-    val productUploadResponse : LiveData<DataState<String>> = _productUploadResponse
+    private val _profileUpdateResponse = MutableLiveData<DataState<String>>()
+    val profileUpdateResponse : LiveData<DataState<String>> = _profileUpdateResponse
 
-    fun updateProfile(user: SellerProfile){
+    fun updateProfile(user: SellerProfile, hashLocalImageUrl : Boolean){
 
-        _productUploadResponse.postValue(DataState.Loading())
+        _profileUpdateResponse.postValue(DataState.Loading())
 
-        val imageUri : Uri = user.userImage.toUri()
+        if (hashLocalImageUrl){
+            val imageUri : Uri? = user.userImage?.toUri()
 
-        repo.uploadImage(imageUri).addOnSuccessListener {snapshot->
-
-
-            snapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener {url ->
-
-                user.userImage = url.toString()
+            imageUri?.let {
+                repo.uploadImage(it).addOnSuccessListener { snapshot->
 
 
-                repo.updateUser(user)
-                    .addOnSuccessListener {
-                        _productUploadResponse.postValue(DataState.Success(
-                            "Uploaded and Updated user Profile Successfully !"
-                        ))
-                    }.addOnFailureListener {
-                        _productUploadResponse.postValue(DataState.Error("${it.message}"))
+                    snapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener {url ->
+
+                        user.userImage = url.toString()
+
+
+                        repo.updateUser(user)
+                            .addOnSuccessListener {
+                                _profileUpdateResponse.postValue(DataState.Success(
+                                    "Uploaded and Updated user Profile Successfully !"
+                                ))
+                            }.addOnFailureListener {
+                                _profileUpdateResponse.postValue(DataState.Error("${it.message}"))
+                            }
+
+
+        //                _productUploadResponse.postValue(DataState.Success(
+        //                    url.toString()
+        //                ))
+
                     }
 
 
-//                _productUploadResponse.postValue(DataState.Success(
-//                    url.toString()
-//                ))
-
+                }.addOnFailureListener {
+                    _profileUpdateResponse.postValue(DataState.Error("Image Uploaded fail"))
+                }
             }
-
-
-        }.addOnFailureListener {
-            _productUploadResponse.postValue(DataState.Error("Image Uploaded fail"))
+        }else{
+            repo.updateUser(user)
+                .addOnSuccessListener {
+                    _profileUpdateResponse.postValue(DataState.Success(
+                        "Uploaded and Updated user Profile Successfully !"
+                    ))
+                }.addOnFailureListener {
+                    _profileUpdateResponse.postValue(DataState.Error("${it.message}"))
+                }
         }
 
 
 
 
 
-//        repo.uploadProductImage()
-//
-//        repo.userLogin(user).addOnSuccessListener {
-//            _loginResponse.postValue(DataState.Success(user))
-//
-//            Log.d("TAG", "login: Success ")
-//        }.addOnFailureListener { error->
-//            _loginResponse.postValue(DataState.Error("${error.message}"))
-//
-//            Log.d("TAG", "userLogin: ${error.message}")
-//        }
+    }
+
+    private val _logedInUserResponse = MutableLiveData<DataState<SellerProfile>>()
+    val logedInUserResponse : LiveData<DataState<SellerProfile>>
+        get() =  _logedInUserResponse
+
+
+    fun getUserByUserID(userID: String){
+
+        _logedInUserResponse.postValue(DataState.Loading())
+
+        repo.getUserByUserID(userID).addOnSuccessListener { value ->
+
+            _logedInUserResponse.postValue(DataState.Success(
+                value.documents[0].toObject(
+                    SellerProfile::class.java
+                )
+            )
+            )
+
+
+        }
+
 
     }
 }

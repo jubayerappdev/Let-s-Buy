@@ -30,5 +30,12 @@ class SellerProfileRepository @Inject constructor(
 
     }
 
+    fun getUserByUserID(userID: String): Task<QuerySnapshot> {
+
+        return db.collection(Nodes.PRODUCT).whereEqualTo("userID", userID).get()
+
+
+    }
+
 
 }

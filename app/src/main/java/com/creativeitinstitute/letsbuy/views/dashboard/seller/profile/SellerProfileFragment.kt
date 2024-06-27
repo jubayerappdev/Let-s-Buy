@@ -13,36 +13,131 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import coil.load
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
+import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.core.areAllPermissionsGranted
+import com.creativeitinstitute.letsbuy.core.extract
 import com.creativeitinstitute.letsbuy.core.requestPermissions
 import com.creativeitinstitute.letsbuy.databinding.FragmentSellerProfileBinding
 import com.creativeitinstitute.letsbuy.views.dashboard.seller.upload.UploadProductFragment
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.UUID
 
 @AndroidEntryPoint
 class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(FragmentSellerProfileBinding::inflate) {
 
 
-    val viewModel : SellerProfileViewModel by viewModels()
+    private var sellerProfile: SellerProfile? = null
+    private val viewModel : SellerProfileViewModel by viewModels()
+
+    private var hashLocalImageUrl :Boolean = false
 
 
     override fun setListener() {
+
+        FirebaseAuth.getInstance().currentUser?.let {
+            viewModel.getUserByUserID(it.uid)
+        }
+
+
         permissionsRequest = getPermissionsRequest()
        binding.apply {
            ivProfile.setOnClickListener {
                requestPermissions(permissionsRequest, permissionList)
+           }
+           btnUpdate.setOnClickListener {
+               loading.show()
+
+               val name = etName.extract()
+               val email = etEmail.extract()
+
+            sellerProfile.apply {
+                this?.name = name
+                this?.email = email
+            }
 
 
+
+
+               updateProfile(sellerProfile)
            }
        }
     }
 
-    override fun allObserver() {
+    private fun updateProfile(sellerProfile: SellerProfile?) {
+
+        sellerProfile?.let { viewModel.updateProfile(it, hashLocalImageUrl) }
 
     }
+
+    override fun allObserver() {
+
+        viewModel.profileUpdateResponse.observe(viewLifecycleOwner){
+
+            when(it){
+                is DataState.Error->{
+
+                    loading.dismiss()
+                }
+                is DataState.Loading -> {
+                    loading.show()
+
+                }
+                is DataState.Success ->{
+                    Toast.makeText(requireContext(), it.data,Toast.LENGTH_LONG).show()
+                    loading.dismiss()
+
+                }
+            }
+
+        }
+
+        viewModel.logedInUserResponse.observe(viewLifecycleOwner){
+
+            when(it){
+                is DataState.Error->{
+
+                    loading.dismiss()
+                }
+                is DataState.Loading -> {
+                    loading.show()
+
+                }
+                is DataState.Success ->{
+                    sellerProfile = it.data
+                    sellerProfileData(sellerProfile)
+                    loading.dismiss()
+
+                }
+            }
+
+
+
+        }
+
+
+    }
+
+    private fun sellerProfileData(sellerProfile: SellerProfile?) {
+        hashLocalImageUrl = sellerProfile?.userImage.isNullOrBlank()
+
+
+
+        binding.apply {
+            etName.setText(sellerProfile?.name)
+            etEmail.setText(sellerProfile?.email)
+            ivProfile.load(sellerProfile?.userImage)
+        }
+
+
+
+
+    }
+
     companion object{
         private val permissionList = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -64,6 +159,8 @@ class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(Fragmen
                 val fileUri = data?.data!!
                 Log.d("TAG", "$fileUri")
                 binding.ivProfile.setImageURI(fileUri)
+                sellerProfile?.userImage = fileUri.toString()
+                hashLocalImageUrl = true
 
 
 
