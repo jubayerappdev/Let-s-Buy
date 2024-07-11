@@ -2,9 +2,7 @@ package com.creativeitinstitute.letsbuy.data.repository
 
 import android.net.Uri
 import com.creativeitinstitute.letsbuy.core.Nodes
-import com.creativeitinstitute.letsbuy.data.Product
-import com.creativeitinstitute.letsbuy.data.models.SellerSource
-import com.creativeitinstitute.letsbuy.views.dashboard.seller.profile.SellerProfile
+import com.creativeitinstitute.letsbuy.views.dashboard.seller.profile.Profile
 import com.creativeitinstitute.letsbuy.views.dashboard.seller.profile.toMap
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,14 +23,14 @@ class SellerProfileRepository @Inject constructor(
 
     }
 
-     fun updateUser(user: SellerProfile):Task<Void> {
+     fun updateUser(user: Profile):Task<Void> {
        return db.collection(Nodes.USER).document(user.userID).update(user.toMap())
 
     }
 
     fun getUserByUserID(userID: String): Task<QuerySnapshot> {
 
-        return db.collection(Nodes.PRODUCT).whereEqualTo("userID", userID).get()
+        return db.collection(Nodes.USER).whereEqualTo("userID", userID).get()
 
 
     }

@@ -7,8 +7,10 @@ import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
+import com.creativeitinstitute.letsbuy.core.Nodes
 import com.creativeitinstitute.letsbuy.databinding.FragmentLoginBinding
 import com.creativeitinstitute.letsbuy.isEmpty
+import com.creativeitinstitute.letsbuy.views.dashboard.customer.CustomerDashboard
 import com.creativeitinstitute.letsbuy.views.dashboard.seller.SellerDashboard
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,8 +60,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     loading.dismiss()
                     Toast.makeText(context,"User logged in : ${it.data}",Toast.LENGTH_SHORT).show()
 
-                    startActivity(Intent(requireContext(), SellerDashboard::class.java))
-                    requireActivity().finish()
+                    it.data?.apply {
+                        when (userType) {
+                            Nodes.USER_TYPE_CUSTOMER -> {
+                                startActivity(Intent(requireContext(), CustomerDashboard::class.java))
+                                requireActivity().finish()
+                            }
+                            Nodes.USER_TYPE_SELLER -> {
+                                startActivity(Intent(requireContext(), SellerDashboard::class.java))
+                                requireActivity().finish()
+                            }
+                            else -> {
+                                Toast.makeText(requireContext(), "Something wnt wrong!", Toast.LENGTH_LONG).show()
+                            }
+                        }
+
+
+                    }
+
                 }
             }
         }

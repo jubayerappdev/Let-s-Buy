@@ -2,36 +2,28 @@ package com.creativeitinstitute.letsbuy.views.dashboard.seller.profile
 
 import android.Manifest
 import android.app.Activity
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import coil.load
-import com.creativeitinstitute.letsbuy.R
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.core.areAllPermissionsGranted
 import com.creativeitinstitute.letsbuy.core.extract
 import com.creativeitinstitute.letsbuy.core.requestPermissions
 import com.creativeitinstitute.letsbuy.databinding.FragmentSellerProfileBinding
-import com.creativeitinstitute.letsbuy.views.dashboard.seller.upload.UploadProductFragment
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.UUID
 
 @AndroidEntryPoint
 class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(FragmentSellerProfileBinding::inflate) {
 
 
-    private var sellerProfile: SellerProfile? = null
+    private var sellerProfile: Profile? = null
     private val viewModel : SellerProfileViewModel by viewModels()
 
     private var hashLocalImageUrl :Boolean = false
@@ -68,7 +60,7 @@ class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(Fragmen
        }
     }
 
-    private fun updateProfile(sellerProfile: SellerProfile?) {
+    private fun updateProfile(sellerProfile: Profile?) {
 
         sellerProfile?.let { viewModel.updateProfile(it, hashLocalImageUrl) }
 
@@ -109,7 +101,7 @@ class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(Fragmen
                 }
                 is DataState.Success ->{
                     sellerProfile = it.data
-                    sellerProfileData(sellerProfile)
+                    setProfileData(sellerProfile)
                     loading.dismiss()
 
                 }
@@ -122,7 +114,7 @@ class SellerProfileFragment : BaseFragment<FragmentSellerProfileBinding>(Fragmen
 
     }
 
-    private fun sellerProfileData(sellerProfile: SellerProfile?) {
+    private fun setProfileData(sellerProfile: Profile?) {
         hashLocalImageUrl = sellerProfile?.userImage.isNullOrBlank()
 
 

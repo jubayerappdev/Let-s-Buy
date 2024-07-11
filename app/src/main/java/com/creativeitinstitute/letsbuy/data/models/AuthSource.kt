@@ -10,6 +10,7 @@ interface AuthSource {
 
     fun userRegistration(user: UserRegister) : Task<AuthResult>
     fun userLogin(user: UserLogin) : Task<AuthResult>
+    fun userForgetPassword(email: String)
     fun createUser(user: UserRegister) :Task<Void>
 
 }
