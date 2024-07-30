@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.data.repository.AuthRepository
 import com.creativeitinstitute.letsbuy.views.dashboard.seller.profile.Profile
+import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -26,28 +27,33 @@ class LoginViewModel @Inject constructor(private val authService: AuthRepository
 
             Log.d("TAG", "login: Success ")
 
-            it.user?.uid?.let { userID ->
-                authService.getUserByUserID(userID).addOnSuccessListener { value ->
-
-                    _loginResponse.postValue(
-                        DataState.Success(
-                        value.documents[0].toObject(
-                            Profile::class.java
-                        )
-                    )
-                    )
-
-
-                }.addOnFailureListener { error->
-                    _loginResponse.postValue(DataState.Error("${error.message}"))
-
-                }
-            }
+          checkUserByID(it.user?.uid)
         }.addOnFailureListener { error->
             _loginResponse.postValue(DataState.Error("${error.message}"))
 
             Log.d("TAG", "userLogin: ${error.message}")
         }
 
+    }
+
+     fun checkUserByID(uid: String?) {
+
+       uid?.let { userID ->
+            authService.getUserByUserID(userID).addOnSuccessListener { value ->
+
+                _loginResponse.postValue(
+                    DataState.Success(
+                        value.documents[0].toObject(
+                            Profile::class.java
+                        )
+                    )
+                )
+
+
+            }.addOnFailureListener { error->
+                _loginResponse.postValue(DataState.Error("${error.message}"))
+
+            }
+        }
     }
 }
