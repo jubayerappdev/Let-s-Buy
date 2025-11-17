@@ -2,12 +2,14 @@ package com.creativeitinstitute.letsbuy.views.dashboard.seller.upload
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.creativeitinstitute.letsbuy.base.BaseFragment
 import com.creativeitinstitute.letsbuy.core.DataState
 import com.creativeitinstitute.letsbuy.core.areAllPermissionsGranted
@@ -15,20 +17,21 @@ import com.creativeitinstitute.letsbuy.core.extract
 import com.creativeitinstitute.letsbuy.core.requestPermissions
 import com.creativeitinstitute.letsbuy.data.Product
 import com.creativeitinstitute.letsbuy.databinding.FragmentUploadProductBinding
+import com.creativeitinstitute.letsbuy.views.dashboard.seller.SellerDashboard
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
 
 @AndroidEntryPoint
-class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(FragmentUploadProductBinding::inflate) {
+class UploadProductFragment :
+    BaseFragment<FragmentUploadProductBinding>(FragmentUploadProductBinding::inflate) {
 
 
-    private val product : Product by lazy() {
+//        lateinit var product: Product
+    private val product: Product by lazy() {
         Product()
     }
-
 
 
     private val viewModel: ProductUploadViewModel by viewModels()
@@ -53,9 +56,16 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
                 val description = etProductDescription.extract()
                 val amount = etProductAmount.extract()
 
+//                product = Product(
+//                    name = name,
+//                    description = description,
+//                    price = price.toDouble(),
+//                    amount = amount.toInt()
+//                )
+
                 FirebaseAuth.getInstance().currentUser?.let {
                     product.apply {
-                        this.productID=UUID.randomUUID().toString()
+                        this.productID = UUID.randomUUID().toString()
                         this.sellerID = it.uid
                         this.name = name
                         this.description = description
@@ -64,14 +74,11 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
                     }
                 }
 
-
-
-                
                 uploadProduct(product)
-                
+
+
+
             }
-
-
 
 
         }
@@ -80,10 +87,9 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
 
     private fun getPermissionsRequest(): ActivityResultLauncher<Array<String>> {
 
-      return  registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+        return registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
 
-            if (areAllPermissionsGranted(permissionList)){
-
+            if (areAllPermissionsGranted(permissionList)) {
 
 
                 //ase
@@ -91,13 +97,16 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
 
                 ImagePicker.with(this)
                     .compress(1024)         //Final image size will be less than 1 MB(Optional)
-                    .maxResultSize(512, 512)  //Final image resolution will be less than 1080 x 1080(Optional)
+                    .maxResultSize(
+                        512,
+                        512
+                    )  //Final image resolution will be less than 1080 x 1080(Optional)
                     .createIntent { intent ->
                         startForProfileImageResult.launch(intent)
                     }
 
 
-            }else{
+            } else {
                 //nai
                 Toast.makeText(requireContext(), "nai", Toast.LENGTH_LONG).show()
 
@@ -118,18 +127,20 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
 
     override fun allObserver() {
 
-        viewModel.productUploadResponse.observe(viewLifecycleOwner){
-            when(it){
-                is DataState.Error->{
+        viewModel.productUploadResponse.observe(viewLifecycleOwner) {
+            when (it) {
+                is DataState.Error -> {
 
                     loading.dismiss()
                 }
+
                 is DataState.Loading -> {
                     loading.show()
 
                 }
-                is DataState.Success ->{
-                    Toast.makeText(requireContext(),it.data, Toast.LENGTH_LONG).show()
+
+                is DataState.Success -> {
+                    Toast.makeText(requireContext(), it.data, Toast.LENGTH_LONG).show()
                     loading.dismiss()
 
                 }
@@ -137,7 +148,8 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
         }
 
     }
-    companion object{
+
+    companion object {
         private val permissionList = arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA
@@ -162,7 +174,8 @@ class UploadProductFragment : BaseFragment<FragmentUploadProductBinding>(Fragmen
 
 
             } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
             }

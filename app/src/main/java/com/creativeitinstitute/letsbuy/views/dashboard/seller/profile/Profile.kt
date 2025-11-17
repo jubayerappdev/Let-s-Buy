@@ -10,7 +10,7 @@ data class Profile(
     var shopName:String?=null
 )
 
-fun Profile.toMap(): Map<String, Any?>{
+fun Profile.toMap(): Map<String, Any?>{ //object map
     return mapOf(
         "name" to name,
         "email" to email,

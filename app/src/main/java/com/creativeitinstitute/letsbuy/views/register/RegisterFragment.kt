@@ -20,7 +20,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
 
 
-
      override fun setListener() {
 
 
@@ -37,7 +36,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                 if (!etName.isEmpty() && !etEmail.isEmpty() && !etPassword.isEmpty()){
                     Toast.makeText(context,"All input done !", Toast.LENGTH_LONG).show()
 
-                    val user = UserRegister(etName.text.toString(),
+                    val user = UserRegister(
+                        etName.text.toString(),
                         etEmail.text.toString(),
                         etPassword.text.toString(),
                         "Seller",
@@ -78,6 +78,4 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             }
         }
     }
-
-
 }

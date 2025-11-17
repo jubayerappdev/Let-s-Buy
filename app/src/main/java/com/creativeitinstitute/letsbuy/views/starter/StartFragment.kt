@@ -24,6 +24,9 @@ class StartFragment : BaseFragment<FragmentStartBinding>(FragmentStartBinding::i
 
     private val viewModel: LoginViewModel by viewModels()
 
+
+//    binding = Frag.inflate(inflater, container, false)
+
      override fun setListener() {
 
          setUpAutoLogin()
@@ -42,6 +45,13 @@ class StartFragment : BaseFragment<FragmentStartBinding>(FragmentStartBinding::i
 
     private fun setUpAutoLogin() {
         val user:FirebaseUser?=FirebaseAuth.getInstance().currentUser
+
+
+//        FirebaseAuth.getInstance().currentUser?.let {
+//            findNavController().navigate(R.id.start to dash)
+//        startActivity(Intent(requireContext(),SellerDashboard::class.java))
+//        requireActivity().finish()
+//        }
 
         if (user != null){
 

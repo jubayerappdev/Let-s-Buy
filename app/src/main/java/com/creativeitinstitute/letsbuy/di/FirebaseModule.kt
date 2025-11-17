@@ -20,11 +20,14 @@ class FirebaseModule {
     @Provides
     @Singleton
     fun providesFirebaseAuth(): FirebaseAuth{
-
-
         return FirebaseAuth.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun providesFirebase(jAuth: FirebaseAuth, db : FirebaseFirestore): AuthRepository {
+        return AuthRepository(jAuth, db)
+    }
 
     @Provides
     @Singleton
@@ -34,14 +37,8 @@ class FirebaseModule {
 
     @Provides
     @Singleton
-    fun providesFirebase(jAuth: FirebaseAuth, db : FirebaseFirestore): AuthRepository {
-        return AuthRepository(jAuth, db)
-    }
-    @Provides
-    @Singleton
     fun providesFirebaseStorage(): StorageReference{
         return FirebaseStorage.getInstance().reference
     }
-
 
 }

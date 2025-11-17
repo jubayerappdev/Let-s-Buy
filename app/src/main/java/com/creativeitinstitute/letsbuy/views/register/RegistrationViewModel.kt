@@ -11,15 +11,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(private val authService: AuthRepository): ViewModel() {
+class RegistrationViewModel @Inject constructor(private val authService: AuthRepository) :
+    ViewModel() {
 
 
-    private val _registrationResponse = MutableLiveData<DataState<UserRegister>>()
+    private val _registrationResponse = MutableLiveData<DataState<UserRegister>>()   //User
     val registrationResponse: LiveData<DataState<UserRegister>> = _registrationResponse
 
 
-    fun userRegistration(user: UserRegister){
+    fun userRegistration(user: UserRegister) {
         _registrationResponse.postValue(DataState.Loading())
+
+
+//        val authService = AuthRepository
 
 
         authService.userRegistration(user)
@@ -33,22 +37,18 @@ class RegistrationViewModel @Inject constructor(private val authService: AuthRep
                         _registrationResponse.postValue(DataState.Success(user))
 
                         Log.d("TAG", "userRegistration: Success ")
-                    }.addOnFailureListener {error->
+                    }.addOnFailureListener { error ->
 
                         _registrationResponse.postValue(DataState.Error("${error.message}"))
 
                     }
                 }
+            }.addOnFailureListener { error ->
 
-
-
-
-        }.addOnFailureListener {error->
-
-            _registrationResponse.postValue(DataState.Error("${error.message}"))
+                _registrationResponse.postValue(DataState.Error("${error.message}"))
 
                 Log.d("TAG", "userRegistration: ${error.message}")
-        }
+            }
     }
 
 }

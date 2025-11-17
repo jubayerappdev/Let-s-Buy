@@ -18,6 +18,9 @@ class AuthRepository @Inject constructor(
     override fun userRegistration(user: UserRegister): Task<AuthResult> {
 
 
+//             val jAuth= FirebaseAuth.getInstance()
+
+
         return jAuth.createUserWithEmailAndPassword(user.email, user.password)
 
 

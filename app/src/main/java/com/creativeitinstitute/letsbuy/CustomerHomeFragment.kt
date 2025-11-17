@@ -49,8 +49,6 @@ class CustomerHomeFragment : BaseFragment<FragmentCustomerHomeBinding>(FragmentC
 
 
 
-
-
     }
 
 
